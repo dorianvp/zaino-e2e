@@ -5,8 +5,7 @@ use tokio::{
     io::{AsyncBufReadExt, BufReader},
     time::timeout,
 };
-
-use super::DynContainer;
+use zaino_e2e::test_helpers::DynContainer;
 
 pub async fn start_zcashd<'a>() -> DynContainer<'a> {
     let image = GenericImage::new("zcashd", "test")
