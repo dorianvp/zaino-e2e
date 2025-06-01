@@ -4,17 +4,18 @@ fn main() {
     println!("Hello, world!");
 }
 
+#[cfg(test)]
 mod tests {
     use std::time::Duration;
 
     use testcontainers::ImageExt;
     use tokio::{
         io::{AsyncBufReadExt, BufReader},
-        time,
+        time::timeout,
     };
 
     #[tokio::test]
-    async fn runs_zcashd() {
+    async fn starts_zcashd() {
         use testcontainers::{GenericImage, runners::AsyncRunner};
 
         let zcashd_image = GenericImage::new("zcashd", "test")
@@ -41,27 +42,28 @@ mod tests {
 
         println!("Container logs (press Ctrl+C to interrupt):");
 
-        tokio::select! {
-            _ = async {
-                while let Ok(Some(line)) = reader.next_line().await {
-                    println!("{}", line);
-                    if line.contains("Done loading") {
-                        break;
-                    }
+        let log_scan = async {
+            while let Ok(Some(line)) = reader.next_line().await {
+                println!("{}", line);
+                if line.contains("Done loading") {
+                    return Ok(());
                 }
-            } => {
-                println!("Container started and log message found.");
+            }
+            Err("Log stream ended before expected message")
+        };
+
+        tokio::select! {
+            result = timeout(Duration::from_secs(10), log_scan) => {
+                match result {
+                    Ok(Ok(())) => println!("Log message found."),
+                    Ok(Err(e)) => panic!("Error: {e}"),
+                    Err(_) => panic!("Timeout while waiting for log message."),
+                }
             }
 
             _ = tokio::signal::ctrl_c() => {
-                println!("Received Ctrl+C. Cleaning up and exiting...");
                 container.stop().await.unwrap();
-
-            }
-            _ = time::sleep(Duration::from_secs(10)) => {
-                println!("Reached timeout. Cleaning up and exiting...");
-                container.stop().await.unwrap();
-                panic!("Timed out waiting for zcashd to be ready.");
+                panic!("Received Ctrl+C. Cleaning up...");
             }
         }
     }
@@ -92,27 +94,78 @@ mod tests {
 
         println!("Container logs (press Ctrl+C to interrupt):");
 
-        tokio::select! {
-            _ = async {
-                while let Ok(Some(line)) = reader.next_line().await {
-                    println!("{}", line);
-                    if line.contains("Zebra is close to the tip tip_height=Height(0)") {
-                        break;
-                    }
+        let log_scan = async {
+            while let Ok(Some(line)) = reader.next_line().await {
+                println!("{}", line);
+                if line.contains("Zebra is close to the tip tip_height=Height(0)") {
+                    return Ok(());
                 }
-            } => {
-                println!("Container started and log message found.");
+            }
+            Err("Log stream ended before expected message")
+        };
+
+        tokio::select! {
+            result = timeout(Duration::from_secs(10), log_scan) => {
+                match result {
+                    Ok(Ok(())) => println!("✅ Log message found."),
+                    Ok(Err(e)) => panic!("Error: {e}"),
+                    Err(_) => panic!("Timeout while waiting for log message."),
+                }
             }
 
             _ = tokio::signal::ctrl_c() => {
-                println!("Received Ctrl+C. Cleaning up and exiting...");
                 container.stop().await.unwrap();
-
+                panic!("Received Ctrl+C. Cleaning up...");
             }
-            _ = time::sleep(Duration::from_secs(10)) => {
-                println!("Reached timeout. Cleaning up and exiting...");
+        }
+    }
+
+    #[tokio::test]
+    async fn starts_disconnected_zaino() {
+        use testcontainers::{GenericImage, runners::AsyncRunner};
+        use tokio::io::AsyncBufReadExt;
+        use tokio::io::BufReader;
+
+        let zainod_image = GenericImage::new("zainod", "test");
+
+        let container = match zainod_image.start().await {
+            Ok(container) => {
+                println!("Container id: {}", container.id());
+                container
+            }
+            Err(err) => {
+                panic!("Error: {}", err)
+            }
+        };
+
+        let logs = container.stdout(true);
+
+        let mut reader = BufReader::new(logs).lines();
+
+        println!("Container logs (press Ctrl+C to interrupt):");
+
+        let log_scan = async {
+            while let Ok(Some(line)) = reader.next_line().await {
+                println!("{}", line);
+                if line.contains("Error: Could not establish connection with node.") {
+                    return Ok(());
+                }
+            }
+            Err("Log stream ended before expected message")
+        };
+
+        tokio::select! {
+            result = timeout(Duration::from_secs(10), log_scan) => {
+                match result {
+                    Ok(Ok(())) => println!("Log message found."),
+                    Ok(Err(e)) => panic!("Error: {e}"),
+                    Err(_) => panic!("Timeout while waiting for log message."),
+                }
+            }
+
+            _ = tokio::signal::ctrl_c() => {
                 container.stop().await.unwrap();
-                panic!("Timed out waiting for zcashd to be ready.");
+                panic!("Received Ctrl+C. Cleaning up...");
             }
         }
     }
