@@ -1,5 +1,3 @@
-mod e2e;
-
 fn main() {
     println!("Hello, world!");
 }
