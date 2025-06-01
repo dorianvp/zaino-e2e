@@ -34,6 +34,7 @@ fn get_docker_version() -> Result<String, String> {
 
 fn get_docker_compose_version() -> Result<String, Error> {
     let output = Command::new("docker-compose").arg("--version").output()?;
+    dbg!(&output);
 
     let version = String::from_utf8_lossy(&output.stdout);
     Ok(version.to_string())
