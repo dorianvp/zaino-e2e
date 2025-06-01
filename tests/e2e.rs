@@ -57,6 +57,7 @@ mod e2e_tests {
 
     use crate::{test_utils::wait_for_log, zainod::start_zaino, zebrad::start_zebrad};
 
+    #[ignore = "requires zcashd"]
     #[tokio::test]
     async fn integration_test_with_zcashd_and_zebrad() {
         let docker = Docker::connect_with_local_defaults().unwrap();

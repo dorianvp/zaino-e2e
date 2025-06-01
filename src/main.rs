@@ -12,6 +12,7 @@ mod tests {
         time::timeout,
     };
 
+    #[ignore = "requires zcashd setup"]
     #[tokio::test]
     async fn starts_zcashd() {
         use testcontainers::{GenericImage, runners::AsyncRunner};

@@ -10,6 +10,7 @@ This project contains experimental ent-to-end tests for Zaino.
 - [Docker](https://www.docker.com/)
 - [Docker Compose](https://github.com/docker/compose)
 - [Cargo](https://doc.rust-lang.org/cargo/)
+- [Cargo Make](https://github.com/sagiegurari/cargo-make)
 - [Nextest](https://nexte.st)
 
 #### Images

@@ -1,0 +1,12 @@
+[tasks]
+build = { command = "cargo", args = ["build"] }
+docker_build = { command = "./build_images.sh", dependencies = ["build"] }
+test = { command = "cargo", args = [
+    "nextest",
+    "run",
+], dependencies = [
+    "docker_build",
+] }
+
+[tasks.default]
+alias = "test"
