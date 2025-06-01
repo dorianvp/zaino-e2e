@@ -11,7 +11,9 @@ This project contains experimental ent-to-end tests for Zaino.
 - [Cargo](https://doc.rust-lang.org/cargo/)
 - [Nextest](https://nexte.st)
 - A local [Zebrad docker image](https://github.com/ZcashFoundation/zebra/blob/main/docker/Dockerfile)
+  - `docker build -t zebrad:test .`
 - A local [Zaino docker image](https://github.com/zingolabs/zaino/blob/dev/Dockerfile)
+  - `docker build -t zainod:test .`
 
 ## Usage
 
