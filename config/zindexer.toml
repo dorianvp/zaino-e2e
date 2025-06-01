@@ -1,0 +1,117 @@
+# Configuration for Zaino
+
+# Backend:
+
+# Type of backend to use. Options are:
+# - "fetch" - Uses JsonRPC client to fetch data (Zcashd, Zainod).
+# - "state" - Uses ReadStateService to fetch data (Zebrad).
+backend = "fetch"
+
+# JsonRPC server config:
+
+# Enables JsonRPC server.
+enable_json_server = false
+
+# JsonRPC server listen addr.
+json_rpc_listen_address = "localhost:8232"
+
+# Enables cookie-based authentication for JsonRPC server.
+enable_cookie_auth = false
+
+# Directory to store authentication cookie file.
+cookie_dir = "None"
+
+# gRPC server config:
+
+# Zainod's gRPC server listen address.
+#
+# Must use TLS when connecting to non localhost addresses.
+grpc_listen_address = "localhost:8137"
+
+# Enables TLS for the gRPC server.
+grpc_tls = false
+
+# Path to the TLS certificate file in PEM format.
+# Required if `tls` is true.
+tls_cert_path = "None"
+
+# Path to the TLS private key file in PEM format.
+# Required if `tls` is true.
+tls_key_path = "None"
+
+# JsonRPC client config:
+
+# Full node / validator listen address.
+#
+# Must be a "pravate" address as defined in [IETF RFC 1918] for ipv4 addreses and [IETF RFC 4193] for ipv6 addreses.
+#
+# Must use validator rpc cookie authentication when connecting to non localhost addresses.
+validator_listen_address = "172.18.0.2:8237"
+
+# Enable validator rpc cookie authentication.
+validator_cookie_auth = true
+
+# Path to the validator cookie file.
+validator_cookie_path = "/home/zaino/.cookie"
+
+# Optional full node / validator Username.
+validator_user = "xxxxxx"
+
+# Optional full node / validator Password.
+validator_password = "xxxxxx"
+
+# Mempool, Non-Finalised State and Finalised State config:
+
+# Capacity of the Dashmaps used for the Mempool.
+# Also use by the BlockCache::NonFinalisedState when using the FetchService.
+#
+# None by default.
+map_capacity = "None"
+
+# Number of shard used in the DashMap used for the Mempool.
+# Also use by the BlockCache::NonFinalisedState when using the FetchService.
+#
+# shard_amount should greater than 0 and be a power of two.
+# If a shard_amount which is not a power of two is provided, the function will panic.
+#
+# None by default.
+map_shard_amount = "None"
+
+# Zaino Block Cache database file path.
+#
+# None by default, this defaults to `$HOME/.cache/zaino/`
+zaino_db_path = "/home/zaino/.cache/zaino/"
+
+# Zebra Block Cache database file path.
+#
+# None by default, this defaults to `$HOME/.cache/zebra/`
+zebra_db_path = "/home/zaino/.cache/zebra/"
+
+# Block Cache database maximum size in gb.
+#
+# Only used by the FetchService.
+#
+# None by default
+db_size = "None"
+
+# Network:
+
+# Network chain type (Mainnet, Testnet, Regtest).
+network = "Regtest"
+
+# Options:
+
+# Disables internal sync and stops zaino waiting on server to sync with p2p network.
+# Useful for testing.
+no_sync = false
+
+# Disables the FinalisedState in the BlockCache
+#
+# Only used by the FetchServic.
+# Used for testing.
+no_db = false
+
+# When enabled Zaino syncs it DB in the background, fetching data from the validator.
+#
+# NOTE: Unimplemented.
+slow_sync = false
