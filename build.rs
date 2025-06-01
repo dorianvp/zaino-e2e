@@ -1,7 +1,7 @@
 use std::{io::Error, process::Command};
 
 fn main() {
-    // println!("cargo:rerun-if-changed=build.rs");
+    println!("cargo:rerun-if-changed=build.rs");
 
     match get_docker_version() {
         Ok(v) => {
@@ -17,6 +17,7 @@ fn main() {
             println!("cargo:warning=Docker Compose version: {}", v);
         }
         Err(e) => {
+            println!("**********************************");
             println!("cargo:error=Docker Compose Error: {}", e);
         }
     }
@@ -34,7 +35,7 @@ fn get_docker_version() -> Result<String, String> {
 
 fn get_docker_compose_version() -> Result<String, Error> {
     let output = Command::new("docker-compose").arg("--version").output()?;
-    dbg!(&output);
+    println!("cargo:warning={:?}", dbg!(&output));
 
     let version = String::from_utf8_lossy(&output.stdout);
     Ok(version.to_string())
