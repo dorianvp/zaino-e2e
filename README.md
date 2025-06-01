@@ -7,6 +7,7 @@ This project contains experimental ent-to-end tests for Zaino.
 ## Requirements
 
 - [Docker](https://www.docker.com/)
+- [Docker Compose](https://github.com/docker/compose)
 - [Cargo](https://doc.rust-lang.org/cargo/)
 - [Nextest](https://nexte.st)
 - A Zebrad image
