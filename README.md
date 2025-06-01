@@ -22,9 +22,9 @@ cargo nextest run
 
 ## Roadmap
 
-- [ ] Boot up Zcashd
+- [x] Boot up Zcashd
+- [x] Boot up Zebrad
 - [ ] Boot up Zaino
-- [ ] Boot up Zebrad
 - [ ] Connect Zaino to Zebrad
 - [ ] Write tests that verify that Zaino provides the same Json-RPC interface as Zcashd
 - [ ] Write tests that verify that Zaino provides the same Json-RPC interface as Zebrad
