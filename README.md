@@ -6,12 +6,19 @@ This project contains experimental ent-to-end tests for Zaino.
 
 ## Requirements
 
+#### Tools
 - [Docker](https://www.docker.com/)
 - [Docker Compose](https://github.com/docker/compose)
 - [Cargo](https://doc.rust-lang.org/cargo/)
 - [Nextest](https://nexte.st)
-- A Zebrad image
-- A Zaino image
+
+#### Images
+- A local [Zebrad docker image](https://github.com/ZcashFoundation/zebra/blob/main/docker/Dockerfile)
+- A local [Zaino docker image](https://github.com/zingolabs/zaino/blob/dev/Dockerfile)
+
+These images can be built with the included [build_images.sh](./build_images.sh) file:
+
+`chmod +x build_images.sh && ./build_images.sh`
 
 ## Usage
 
