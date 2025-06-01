@@ -7,6 +7,7 @@ use tokio::{
 };
 use zaino_e2e::test_helpers::DynContainer;
 
+#[allow(dead_code)]
 pub async fn start_zcashd<'a>() -> DynContainer<'a> {
     let image = GenericImage::new("zcashd", "test")
         .with_env_var("ZCASHD_NETWORK", "regtest")
