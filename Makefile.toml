@@ -1,6 +1,7 @@
 [tasks]
 build = { command = "cargo", args = ["build"] }
 docker_build = { command = "./build_images.sh", dependencies = ["build"] }
+test_local = { command = "cargo", args = ["nextest", "run"] }
 test = { command = "cargo", args = [
     "nextest",
     "run",

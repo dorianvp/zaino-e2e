@@ -6,35 +6,54 @@ This project contains experimental ent-to-end tests for Zaino.
 
 ## Requirements
 
-#### Tools
+### Tools
+
 - [Docker](https://www.docker.com/)
-- [Docker Compose](https://github.com/docker/compose)
 - [Cargo](https://doc.rust-lang.org/cargo/)
 - [Cargo Make](https://github.com/sagiegurari/cargo-make)
 - [Nextest](https://nexte.st)
 
-#### Images
-- A local [Zebrad docker image](https://github.com/ZcashFoundation/zebra/blob/main/docker/Dockerfile)
-- A local [Zaino docker image](https://github.com/zingolabs/zaino/blob/dev/Dockerfile)
+### Images
 
-These images can be built with the included [build_images.sh](./build_images.sh) file:
+Images are automatically downloaded when running `cargo make` or either the `docker_build` or `test` tasks. See the [other tasks](#other-tasks) section for more information.
 
-`chmod +x build_images.sh && ./build_images.sh`
+## Building
+
+This project uses [Cargo Make](https://github.com/sagiegurari/cargo-make) to fetch and build Docker images, and to build and run tests.
 
 ## Usage
+
+### Run all tests
 
 Run the tests using:
 
 ```bash
-cargo nextest run
+cargo make
+```
+
+### Other tasks
+
+```bash
+# Runs cargo build
+cargo make build
+
+# Fetches necessary git repos and builds images
+cargo make docker_build
+
+# Runs all of the above and runs tests
+cargo make test
+
+# Runs all tests using local images
+# (the test framework expects these images to have a particular name)
+cargo make test_local
 ```
 
 ## Roadmap
 
 - [x] Boot up Zcashd
 - [x] Boot up Zebrad
-- [ ] Boot up Zaino
-- [ ] Connect Zaino to Zebrad
+- [x] Boot up Zaino
+- [x] Connect Zaino to Zebrad
 - [ ] Write tests that verify that Zaino provides the same Json-RPC interface as Zcashd
 - [ ] Write tests that verify that Zaino provides the same Json-RPC interface as Zebrad
 
